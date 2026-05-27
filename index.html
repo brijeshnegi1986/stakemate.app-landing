@@ -54,6 +54,7 @@
     .reveal.visible, .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: none; }
 
     /* HERO */
+    .hero-logo { height: 96px; width: auto; margin-bottom: 28px; }
     .hero {
       text-align: center;
       padding: 90px 24px 60px;
@@ -88,22 +89,40 @@
     .btn-appstore:hover { opacity: 0.9; text-decoration: none; transform: translateY(-2px); }
     .hero-meta { margin-top: 16px; font-size: 13px; color: var(--muted); }
 
-    /* HERO PHONES ROW */
-    .hero-phones {
-      display: flex; justify-content: center; align-items: flex-end;
-      gap: 16px; margin-top: 64px; padding: 0 24px;
-      overflow: hidden;
+    /* HERO SCROLL SHOWCASE */
+    .hero-scroll-wrap {
+      width: 100%; overflow: hidden;
+      margin-top: 80px;
+      padding: 40px 0 60px;
+      position: relative;
     }
-    .hero-phone {
+    .hero-scroll-wrap::before,
+    .hero-scroll-wrap::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 180px; z-index: 2; pointer-events: none;
+    }
+    .hero-scroll-wrap::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+    .hero-scroll-wrap::after  { right: 0; background: linear-gradient(to left,  var(--bg), transparent); }
+    .hero-scroll-track {
+      display: flex; gap: 24px; width: max-content;
+      animation: heroScroll 30s linear infinite;
+      will-change: transform;
+    }
+    .hero-scroll-wrap:hover .hero-scroll-track { animation-play-state: paused; }
+    @keyframes heroScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .hero-phone-card {
       flex-shrink: 0;
-      border-radius: 24px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
-      transition: transform 0.4s ease;
+      border-radius: 36px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      width: 280px;
     }
-    .hero-phone:hover { transform: translateY(-10px); }
-    .hero-phone.main { width: 210px; }
-    .hero-phone.side { width: 170px; opacity: 0.75; margin-bottom: 20px; }
-    .hero-phone.far { width: 140px; opacity: 0.45; margin-bottom: 36px; }
+    .hero-phone-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 56px 100px rgba(0,0,0,0.9), 0 0 0 1px rgba(154,254,67,0.15);
+    }
 
     /* STATS BAR */
     .stats-bar {
@@ -254,6 +273,7 @@
 
 <!-- HERO -->
 <section class="hero">
+  <img src="images/Pokerroll-logo.svg" alt="PokerRoll" class="hero-logo reveal" />
   <div class="badge reveal">🃏 Now Available on the App Store</div>
   <h1 class="reveal">
     The poker tracker<br />built for <span class="accent">serious players.</span>
@@ -271,13 +291,25 @@
   </div>
 </section>
 
-<!-- HERO PHONES -->
-<div class="hero-phones reveal">
-  <img class="hero-phone far" src="images/screen1.png" alt="PokerRoll welcome screen" />
-  <img class="hero-phone side" src="images/screen6.png" alt="PokerRoll dashboard" />
-  <img class="hero-phone main" src="images/screen5.png" alt="PokerRoll live session" />
-  <img class="hero-phone side" src="images/screen10.png" alt="PokerRoll hand review" />
-  <img class="hero-phone far" src="images/screen11.png" alt="PokerRoll pro plans" />
+<!-- HERO SCROLL SHOWCASE -->
+<div class="hero-scroll-wrap">
+  <div class="hero-scroll-track">
+    <img class="hero-phone-card" src="images/screen1.png"  alt="PokerRoll welcome screen" />
+    <img class="hero-phone-card" src="images/screen5.png"  alt="PokerRoll live session" />
+    <img class="hero-phone-card" src="images/screen6.png"  alt="PokerRoll dashboard" />
+    <img class="hero-phone-card" src="images/screen7.png"  alt="PokerRoll add session" />
+    <img class="hero-phone-card" src="images/screen9.png"  alt="PokerRoll hand notes" />
+    <img class="hero-phone-card" src="images/screen10.png" alt="PokerRoll AI coaching" />
+    <img class="hero-phone-card" src="images/screen11.png" alt="PokerRoll pro plans" />
+    <!-- duplicate set for seamless loop -->
+    <img class="hero-phone-card" src="images/screen1.png"  alt="PokerRoll welcome screen" />
+    <img class="hero-phone-card" src="images/screen5.png"  alt="PokerRoll live session" />
+    <img class="hero-phone-card" src="images/screen6.png"  alt="PokerRoll dashboard" />
+    <img class="hero-phone-card" src="images/screen7.png"  alt="PokerRoll add session" />
+    <img class="hero-phone-card" src="images/screen9.png"  alt="PokerRoll hand notes" />
+    <img class="hero-phone-card" src="images/screen10.png" alt="PokerRoll AI coaching" />
+    <img class="hero-phone-card" src="images/screen11.png" alt="PokerRoll pro plans" />
+  </div>
 </div>
 
 <!-- STATS BAR -->
