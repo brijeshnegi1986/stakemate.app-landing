@@ -42,7 +42,7 @@
       display: flex; align-items: center; justify-content: space-between;
       height: 62px;
     }
-    .nav-brand img { height: 32px; width: auto; display: block; }
+    .nav-brand img { height: 48px; width: auto; display: block; }
     .nav-links { display: flex; gap: 28px; list-style: none; }
     .nav-links a { color: var(--muted); font-size: 14px; font-weight: 500; transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
@@ -54,30 +54,47 @@
     .reveal.visible, .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: none; }
 
     /* HERO */
-    .hero-logo { height: 96px; width: auto; margin-bottom: 28px; }
     .hero {
-      text-align: center;
-      padding: 90px 24px 60px;
-      max-width: 780px;
-      margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+      max-width: 1140px; margin: 0 auto;
+      padding: 80px 32px 60px;
     }
+    .hero-phones-col { position: relative; height: 580px; }
+    .hero-phone-back {
+      position: absolute; left: 190px; top: 70px;
+      width: 215px; border-radius: 30px;
+      transform: rotate(4deg);
+      box-shadow: 0 32px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05);
+      opacity: 0.92; z-index: 1;
+    }
+    .hero-phone-front {
+      position: absolute; left: 10px; top: 30px;
+      width: 250px; border-radius: 32px;
+      box-shadow: 0 48px 96px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.07);
+      transform: rotate(-3deg);
+      z-index: 2;
+    }
+    .hero-text-col { display: flex; flex-direction: column; align-items: flex-start; }
+    .hero-logo { height: 48px; width: auto; margin-bottom: 24px; }
+    .hero-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
     .badge {
       display: inline-flex; align-items: center; gap: 7px;
       background: rgba(154,254,67,0.1);
       border: 1px solid rgba(154,254,67,0.28);
       border-radius: 999px; padding: 5px 16px;
       font-size: 11px; font-weight: 700; color: var(--green);
-      letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 28px;
+      letter-spacing: 0.8px; text-transform: uppercase;
     }
     .hero h1 {
-      font-size: clamp(38px, 7vw, 68px);
+      font-size: clamp(36px, 4.5vw, 62px);
       font-weight: 900; line-height: 1.05;
-      letter-spacing: -1px; margin-bottom: 22px;
+      letter-spacing: -1px; margin-bottom: 20px;
     }
     .hero h1 .accent { color: var(--green); }
     .hero p {
-      font-size: 19px; color: var(--muted);
-      max-width: 540px; margin: 0 auto 44px; line-height: 1.7;
+      font-size: 18px; color: var(--muted);
+      margin: 0 0 36px; line-height: 1.7;
     }
     .btn-appstore {
       display: inline-flex; align-items: center; gap: 10px;
@@ -87,7 +104,26 @@
       transition: opacity 0.2s, transform 0.2s; letter-spacing: -0.2px;
     }
     .btn-appstore:hover { opacity: 0.9; text-decoration: none; transform: translateY(-2px); }
-    .hero-meta { margin-top: 16px; font-size: 13px; color: var(--muted); }
+    .hero-meta { font-size: 13px; color: var(--muted); }
+
+    /* SCROLL CUE */
+    .scroll-cue {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      margin-top: 48px; color: var(--muted); font-size: 11px;
+      font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+      animation: scrollCueFade 2.4s ease-in-out infinite;
+      will-change: opacity;
+      cursor: pointer; -webkit-user-select: none; user-select: none;
+    }
+    .scroll-cue svg { display: block; will-change: transform; animation: scrollCueBounce 1.2s ease-in-out infinite; }
+    @keyframes scrollCueBounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(7px); }
+    }
+    @keyframes scrollCueFade {
+      0%, 100% { opacity: 0.45; }
+      50%       { opacity: 1; }
+    }
 
     /* HERO SCROLL SHOWCASE */
     .hero-scroll-wrap {
@@ -194,6 +230,104 @@
     }
     .phone-frame:hover img { transform: translateY(-10px) scale(1.02); }
 
+    /* HOTSPOTS */
+    .hotspot-wrap { position: relative; display: inline-block; }
+    .hotspot {
+      position: absolute;
+      left: var(--hx); top: var(--hy);
+      transform: translate(-50%, -50%);
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(var(--hs-rgb), 0.18);
+      border: 1.5px solid rgba(var(--hs-rgb), 0.8);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: rgb(var(--hs-rgb));
+      transition: background 0.2s, transform 0.25s;
+      z-index: 10; padding: 0;
+    }
+    .hotspot:hover { background: rgba(var(--hs-rgb), 0.3); }
+    .hotspot.active {
+      background: rgba(var(--hs-rgb), 0.32);
+      transform: translate(-50%, -50%) scale(1.15);
+      border-color: rgb(var(--hs-rgb));
+    }
+    .hotspot > svg { transition: transform 0.3s ease; pointer-events: none; flex-shrink: 0; }
+    .hotspot.active > svg { transform: rotate(45deg); }
+    .hotspot-ring {
+      position: absolute; inset: -8px; border-radius: 50%;
+      border: 1px solid rgba(var(--hs-rgb), 0.45);
+      animation: hsRing 2.4s ease-out infinite;
+      pointer-events: none; will-change: transform, opacity;
+    }
+    .hotspot-ring + .hotspot-ring { inset: -18px; animation-delay: 0.75s; }
+    @keyframes hsRing {
+      0%   { opacity: 0.7; transform: scale(0.8); }
+      100% { opacity: 0;   transform: scale(1.1); }
+    }
+    .hotspot-callout {
+      position: absolute; top: 50%;
+      width: 190px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 13px 15px;
+      box-shadow: 0 20px 48px rgba(0,0,0,0.72);
+      pointer-events: none; opacity: 0;
+      transform: translateY(-50%) scale(0.9);
+      transition: opacity 0.22s, transform 0.22s;
+      text-align: left; z-index: 20;
+    }
+    .hs-right .hotspot-callout { left: calc(100% + 14px); }
+    .hs-left  .hotspot-callout { right: calc(100% + 14px); }
+    .hotspot.active .hotspot-callout {
+      opacity: 1; transform: translateY(-50%) scale(1); pointer-events: auto;
+    }
+    .hotspot-callout strong { display: block; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .hotspot-callout p { font-size: 12px; color: var(--muted); line-height: 1.55; margin: 0; }
+    .hs-green  { --hs-rgb: 154,254,67; }
+    .hs-teal   { --hs-rgb: 13,148,136; }
+    .hs-purple { --hs-rgb: 124,58,237; }
+    @media (max-width: 800px) { .hotspot { display: none; } }
+
+    /* SESSION FLOW DIAGRAM */
+    .session-flow { display: flex; align-items: center; gap: 18px; position: relative; z-index: 1; }
+    .flow-source { display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
+    .flow-phone-wrap { position: relative; }
+    .flow-phone-sm {
+      width: 118px; border-radius: 20px; display: block;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+    .flow-tap {
+      position: absolute; left: 72%; top: 88%;
+      transform: translate(-50%, -50%);
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 2px solid var(--green);
+      pointer-events: none;
+    }
+    .flow-tap-ring {
+      position: absolute; inset: -8px; border-radius: 50%;
+      border: 1.5px solid rgba(154,254,67,0.5);
+      animation: tapRingPulse 1.8s ease-out infinite;
+      will-change: transform, opacity;
+    }
+    .flow-tap-ring + .flow-tap-ring { inset: -18px; animation-delay: 0.55s; }
+    @keyframes tapRingPulse {
+      0%   { opacity: 0.7; transform: scale(0.85); }
+      100% { opacity: 0;   transform: scale(1.2); }
+    }
+    .flow-step-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--muted); text-align: center;
+    }
+    .flow-step-label em { font-style: normal; color: var(--green); }
+    .flow-connector { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+    .flow-connector-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--muted); }
+    .flow-arrow-path { stroke-dasharray: 5 4; animation: flowDash 0.9s linear infinite; will-change: stroke-dashoffset; }
+    @keyframes flowDash { to { stroke-dashoffset: -18; } }
+    .flow-dest { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .session-flow .hotspot-wrap img { width: 200px; border-radius: 26px; }
+
     /* DIVIDER */
     hr.divider { border: none; border-top: 1px solid var(--border); max-width: 1100px; margin: 0 auto; }
 
@@ -246,9 +380,11 @@
     /* RESPONSIVE */
     @media (max-width: 800px) {
       .nav-links { display: none; }
-      .hero { padding: 64px 20px 48px; }
-      .hero-phones .side, .hero-phones .far { display: none; }
-      .hero-phone.main { width: 240px; }
+      .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 0; }
+      .hero-phones-col { height: 420px; margin-top: 40px; order: 1; }
+      .hero-phone-front { width: 190px; left: 5px; top: 20px; }
+      .hero-phone-back { width: 170px; left: 140px; top: 50px; }
+      .hero-text-col { align-items: flex-start; }
       .stats-bar { gap: 28px; flex-wrap: wrap; }
       .feature-row, .pricing-section { grid-template-columns: 1fr; gap: 48px; margin-bottom: 80px; }
       .feature-row.flip { direction: ltr; }
@@ -273,23 +409,42 @@
 
 <!-- HERO -->
 <section class="hero">
-  <img src="images/Pokerroll-logo.svg" alt="PokerRoll" class="hero-logo reveal" />
-  <div class="badge reveal">🃏 Now Available on the App Store</div>
-  <h1 class="reveal">
-    The poker tracker<br />built for <span class="accent">serious players.</span>
-  </h1>
-  <p class="reveal">
-    Track sessions, log hands, and get street-by-street AI coaching.<br />
-    Free for 7 days — no credit card required.
-  </p>
-  <div class="reveal">
-    <a class="btn-appstore" href="https://apps.apple.com/au/app/pokerroll/id0000000000" target="_blank" rel="noopener">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-      Download on the App Store
-    </a>
-    <p class="hero-meta">iPhone · iOS 16+ · Australia</p>
+
+  <!-- Left: floating phone mockups -->
+  <div class="hero-phones-col reveal-left">
+    <img class="hero-phone-back" src="images/screen5.png" alt="PokerRoll live session" />
+    <img class="hero-phone-front" src="images/screen6.png" alt="PokerRoll dashboard" />
   </div>
+
+  <!-- Right: text + CTA -->
+  <div class="hero-text-col">
+    <img src="images/Pokerroll-logo.svg" alt="PokerRoll" class="hero-logo reveal" />
+    <h1 class="reveal">
+      The poker tracker<br />built for <span class="accent">serious players.</span>
+    </h1>
+    <p class="reveal">
+      Track every session, log hands, and get street-by-street AI coaching.
+      Free for 7 days — no credit card required.
+    </p>
+    <div class="reveal hero-cta">
+      <div class="badge">Now Available on the App Store</div>
+      <a class="btn-appstore" href="https://apps.apple.com/au/app/pokerroll/id0000000000" target="_blank" rel="noopener">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download on the App Store
+      </a>
+      <p class="hero-meta">iPhone · iOS 16+ · Australia</p>
+    </div>
+  </div>
+
 </section>
+
+<!-- SCROLL CUE -->
+<div class="scroll-cue" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+  <span>Scroll to explore</span>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="4 7 10 13 16 7"/>
+  </svg>
+</div>
 
 <!-- HERO SCROLL SHOWCASE -->
 <div class="hero-scroll-wrap">
@@ -362,9 +517,26 @@
         </li>
       </ul>
     </div>
-    <div class="phone-frame reveal-right">
+    <div class="phone-frame reveal-right hs-green">
       <div class="phone-glow" style="background:#9afe43;"></div>
-      <img src="images/screen6.png" alt="PokerRoll dashboard showing +$200 profit" />
+      <div class="hotspot-wrap">
+        <img src="images/screen6.png" alt="PokerRoll dashboard showing +$200 profit" />
+        <div class="hotspot hs-left" data-hx="50%" data-hy="30%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>Cash Profit</strong><p>Running bankroll P&L — updated automatically after every session.</p></div>
+        </div>
+        <div class="hotspot hs-left" data-hx="50%" data-hy="44%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>Session Stats</strong><p>Hours played, total sessions and true $/hr — all in one row.</p></div>
+        </div>
+        <div class="hotspot hs-left" data-hx="50%" data-hy="53%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>Cash Win Rate</strong><p>Percentage of cash sessions you finished in profit.</p></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -393,9 +565,56 @@
         </li>
       </ul>
     </div>
-    <div class="phone-frame reveal-left">
+    <div class="phone-frame reveal-left hs-green">
       <div class="phone-glow" style="background:#9afe43;"></div>
-      <img src="images/screen5.png" alt="PokerRoll live session timer at Star Sydney" />
+      <div class="session-flow">
+
+        <!-- Source: Dashboard -->
+        <div class="flow-source">
+          <div class="flow-step-label">Dashboard</div>
+          <div class="flow-phone-wrap">
+            <img class="flow-phone-sm" src="images/screen6.png" alt="PokerRoll dashboard" />
+            <div class="flow-tap">
+              <span class="flow-tap-ring"></span>
+              <span class="flow-tap-ring"></span>
+            </div>
+          </div>
+          <div class="flow-step-label">Tap <em>Start Session</em></div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="flow-connector">
+          <div class="flow-connector-label">Opens</div>
+          <svg width="44" height="16" viewBox="0 0 44 16" fill="none" aria-hidden="true">
+            <path class="flow-arrow-path" d="M2 8 L33 8" stroke="#9afe43" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M29 3 L40 8 L29 13" stroke="#9afe43" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <!-- Destination: Live screen -->
+        <div class="flow-dest">
+          <div class="flow-step-label"><em>Live</em> screen</div>
+          <div class="hotspot-wrap">
+            <img src="images/screen5.png" alt="PokerRoll live session timer" />
+            <div class="hotspot hs-right" data-hx="50%" data-hy="40%">
+              <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+              <div class="hotspot-callout"><strong>Live Timer</strong><p>Real-time elapsed — always know exactly how long you've been seated.</p></div>
+            </div>
+            <div class="hotspot hs-right" data-hx="50%" data-hy="64%">
+              <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+              <div class="hotspot-callout"><strong>Session Details</strong><p>Stakes, buy-in and venue — always visible mid-session.</p></div>
+            </div>
+            <div class="hotspot hs-right" data-hx="50%" data-hy="84%">
+              <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+              <div class="hotspot-callout"><strong>Quick Actions</strong><p>Break, Notes and Rebuy — one tap without ending your session.</p></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -424,9 +643,26 @@
         </li>
       </ul>
     </div>
-    <div class="phone-frame reveal-right">
+    <div class="phone-frame reveal-right hs-green">
       <div class="phone-glow" style="background:#9afe43;"></div>
-      <img src="images/screen7.png" alt="PokerRoll add live session with Australian venues" />
+      <div class="hotspot-wrap">
+        <img src="images/screen7.png" alt="PokerRoll add live session with Australian venues" />
+        <div class="hotspot hs-left" data-hx="50%" data-hy="39%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>Quick Stakes</strong><p>1/1, 1/2, 2/3, 5/5, 10/10 — tap to select in one second.</p></div>
+        </div>
+        <div class="hotspot hs-left" data-hx="50%" data-hy="52%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>State Defaults</strong><p>NSW, VIC, QLD, WA, SA, ACT — auto-fills venues for your state.</p></div>
+        </div>
+        <div class="hotspot hs-left" data-hx="50%" data-hy="68%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>Preset Venues</strong><p>Star Sydney, Crown, APL, NPL & more — one tap to select.</p></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -455,9 +691,26 @@
         </li>
       </ul>
     </div>
-    <div class="phone-frame reveal-left">
+    <div class="phone-frame reveal-left hs-teal">
       <div class="phone-glow" style="background:#0d9488;"></div>
-      <img src="images/screen9.png" alt="PokerRoll hand notes screen" />
+      <div class="hotspot-wrap">
+        <img src="images/screen9.png" alt="PokerRoll hand notes screen" />
+        <div class="hotspot hs-right" data-hx="50%" data-hy="23%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>Hand Reviewed Badge</strong><p>Shows which hands have already been sent to your AI coach.</p></div>
+        </div>
+        <div class="hotspot hs-right" data-hx="50%" data-hy="52%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>Hand History</strong><p>Write in plain English — street by street, exactly how you remember it.</p></div>
+        </div>
+        <div class="hotspot hs-right" data-hx="50%" data-hy="83%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>Review Hand</strong><p>Send to your AI coach for instant street-by-street analysis.</p></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -486,9 +739,26 @@
         </li>
       </ul>
     </div>
-    <div class="phone-frame reveal-right">
+    <div class="phone-frame reveal-right hs-purple">
       <div class="phone-glow" style="background:#7c3aed;"></div>
-      <img src="images/screen10.png" alt="PokerRoll AI hand review coaching screen" />
+      <div class="hotspot-wrap">
+        <img src="images/screen10.png" alt="PokerRoll AI hand review coaching screen" />
+        <div class="hotspot hs-left" data-hx="50%" data-hy="16%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>Decision Grade</strong><p>C Marginal — every preflop decision is graded instantly by your AI coach.</p></div>
+        </div>
+        <div class="hotspot hs-left" data-hx="50%" data-hy="47%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>Do This Instead</strong><p>Specific alternative lines — not generic advice, actual plays for your exact spot.</p></div>
+        </div>
+        <div class="hotspot hs-left" data-hx="50%" data-hy="63%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>A Excellent</strong><p>Flop played perfectly — see exactly what you did right street by street.</p></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -679,6 +949,24 @@
 </footer>
 
 <script>
+  // apply hotspot positions from data attributes (avoids inline style warnings)
+  document.querySelectorAll('.hotspot[data-hx]').forEach(el => {
+    el.style.setProperty('--hx', el.dataset.hx);
+    el.style.setProperty('--hy', el.dataset.hy);
+  });
+  // hotspot click toggle
+  document.querySelectorAll('.hotspot').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const wasActive = btn.classList.contains('active');
+      document.querySelectorAll('.hotspot.active').forEach(h => h.classList.remove('active'));
+      if (!wasActive) btn.classList.add('active');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.hotspot.active').forEach(h => h.classList.remove('active'));
+  });
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.12 });
