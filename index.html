@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PokerRoll by Stakemate — Poker Bankroll Tracker</title>
-  <meta name="description" content="Track every poker session, log hands, and get AI coaching. Built for serious Australian poker players." />
+  <title>Stakemate — The Complete App for Serious Poker Players</title>
+  <meta name="description" content="Track sessions, analyse performance, get AI hand coaching, buy & sell tournament stakes, and never miss a poker event. Built for serious players." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      /* --bg: #080d14; */
-      --bg: #000000;
-      --bg2: #0f1520;
-      --bg3: #161e2e;
-      --border: #1e2a3a;
-      --green: #9afe43;
-      --teal: #0d9488;
+      --bg:     #09090f;
+      --bg2:    #0f1020;
+      --bg3:    #161828;
+      --border: #1e2240;
+      --blue:   #2563eb;
+      --blue2:  #1d4ed8;
+      --green:  #9afe43;
       --purple: #7c3aed;
-      --orange: #d97706;
-      --text: #e6edf3;
-      --muted: #6b7c93;
+      --teal:   #0d9488;
+      --orange: #f59e0b;
+      --text:   #e8edf8;
+      --muted:  #6b7c9e;
       --radius: 14px;
     }
     html { scroll-behavior: smooth; }
@@ -32,245 +33,282 @@
     a { color: var(--green); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* NAV */
+    /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(8,13,20,0.9);
-      backdrop-filter: blur(16px);
+      background: rgba(9,9,15,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      padding: 0 32px;
+      padding: 0 36px;
       display: flex; align-items: center; justify-content: space-between;
-      height: 62px;
+      height: 64px;
     }
-    .nav-brand img { height: 48px; width: auto; display: block; }
-    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-brand img { height: 44px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
     .nav-links a { color: var(--muted); font-size: 14px; font-weight: 500; transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--blue); color: #fff;
+      border-radius: 10px; padding: 9px 20px;
+      font-size: 14px; font-weight: 700;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .nav-cta:hover { background: var(--blue2); text-decoration: none; transform: translateY(-1px); }
 
-    /* SCROLL REVEAL */
-    .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.75s ease, transform 0.75s ease; }
-    .reveal-left { opacity: 0; transform: translateX(-48px); transition: opacity 0.75s ease, transform 0.75s ease; }
-    .reveal-right { opacity: 0; transform: translateX(48px); transition: opacity 0.75s ease, transform 0.75s ease; }
+    /* ── SCROLL REVEAL ── */
+    .reveal       { opacity: 0; transform: translateY(36px);  transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-left  { opacity: 0; transform: translateX(-48px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-right { opacity: 0; transform: translateX(48px);  transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.visible, .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: none; }
 
-    /* HERO */
+    /* ── HERO ── */
+    .hero-wrapper {
+      position: relative; overflow: hidden;
+    }
+    .hero-gradient {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 70% 60% at 60% 0%, rgba(37,99,235,0.18) 0%, transparent 70%),
+                  radial-gradient(ellipse 50% 50% at 20% 80%, rgba(124,58,237,0.10) 0%, transparent 70%);
+    }
     .hero {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 60px; align-items: center;
-      max-width: 1140px; margin: 0 auto;
-      padding: 80px 32px 60px;
-    }
-    .hero-phones-col { position: relative; height: 580px; }
-    .hero-phone-back {
-      position: absolute; left: 190px; top: 70px;
-      width: 215px; border-radius: 30px;
-      transform: rotate(4deg);
-      box-shadow: 0 32px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05);
-      opacity: 0.92; z-index: 1;
-    }
-    .hero-phone-front {
-      position: absolute; left: 10px; top: 30px;
-      width: 250px; border-radius: 32px;
-      box-shadow: 0 48px 96px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.07);
-      transform: rotate(-3deg);
-      z-index: 2;
+      gap: 64px; align-items: center;
+      max-width: 1160px; margin: 0 auto;
+      padding: 100px 36px 80px;
+      position: relative; z-index: 1;
     }
     .hero-text-col { display: flex; flex-direction: column; align-items: flex-start; }
-    .hero-logo { height: 72px; width: auto; margin-bottom: 24px; }
-    .hero-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
-    .badge {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: rgba(154,254,67,0.1);
-      border: 1px solid rgba(154,254,67,0.28);
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(37,99,235,0.12);
+      border: 1px solid rgba(37,99,235,0.35);
       border-radius: 999px; padding: 5px 16px;
-      font-size: 11px; font-weight: 700; color: var(--green);
-      letter-spacing: 0.8px; text-transform: uppercase;
+      font-size: 11px; font-weight: 700; color: #60a5fa;
+      letter-spacing: 0.9px; text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #60a5fa;
+      box-shadow: 0 0 8px #60a5fa;
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+    @keyframes dotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.7); }
     }
     .hero h1 {
-      font-size: clamp(36px, 4.5vw, 62px);
-      font-weight: 900; line-height: 1.05;
-      letter-spacing: -1px; margin-bottom: 20px;
+      font-size: clamp(38px, 4.8vw, 68px);
+      font-weight: 900; line-height: 1.04;
+      letter-spacing: -1.5px; margin-bottom: 24px;
     }
-    .hero h1 .accent { color: var(--green); }
-    .hero p {
+    .hero h1 .accent-green  { color: var(--green); }
+    .hero h1 .accent-blue   { color: #60a5fa; }
+    .hero-sub {
       font-size: 18px; color: var(--muted);
-      margin: 0 0 36px; line-height: 1.7;
+      margin: 0 0 40px; line-height: 1.75; max-width: 480px;
     }
-    .btn-appstore {
+    .btn-primary {
       display: inline-flex; align-items: center; gap: 10px;
       background: var(--text); color: #000;
-      border-radius: 16px; padding: 15px 32px;
+      border-radius: 16px; padding: 16px 34px;
       font-size: 16px; font-weight: 800;
       transition: opacity 0.2s, transform 0.2s; letter-spacing: -0.2px;
     }
-    .btn-appstore:hover { opacity: 0.9; text-decoration: none; transform: translateY(-2px); }
-    .hero-meta { font-size: 13px; color: var(--muted); }
+    .btn-primary:hover { opacity: 0.9; text-decoration: none; transform: translateY(-2px); }
+    .hero-meta { font-size: 13px; color: var(--muted); margin-top: 14px; }
 
-    /* SCROLL CUE */
+    /* Hero phones */
+    .hero-phones-col { position: relative; height: 600px; }
+    .hero-phone-back {
+      position: absolute; right: 20px; top: 80px;
+      width: 220px; border-radius: 32px;
+      transform: rotate(5deg);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05);
+      opacity: 0.88; z-index: 1;
+    }
+    .hero-phone-front {
+      position: absolute; left: 0; top: 30px;
+      width: 260px; border-radius: 36px;
+      box-shadow: 0 56px 120px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.07),
+                  0 0 80px rgba(37,99,235,0.15);
+      transform: rotate(-3deg);
+      z-index: 2;
+    }
+    /* floating badge */
+    .hero-badge-float {
+      position: absolute; right: 10px; top: 260px; z-index: 3;
+      background: rgba(15,16,32,0.92);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green);
+      border-radius: 12px; padding: 12px 16px;
+      backdrop-filter: blur(12px);
+      animation: floatBadge 3s ease-in-out infinite;
+      min-width: 160px;
+    }
+    .hero-badge-float .badge-val {
+      font-size: 20px; font-weight: 900; color: var(--green); letter-spacing: -0.5px;
+    }
+    .hero-badge-float .badge-lbl {
+      font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600;
+    }
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* ── SCROLL CUE ── */
     .scroll-cue {
       display: flex; flex-direction: column; align-items: center; gap: 8px;
-      margin-top: 48px; color: var(--muted); font-size: 11px;
-      font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+      padding-bottom: 24px; color: var(--muted); font-size: 11px;
+      font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase;
       animation: scrollCueFade 2.4s ease-in-out infinite;
-      will-change: opacity;
       cursor: pointer; -webkit-user-select: none; user-select: none;
+      position: relative; z-index: 1;
     }
-    .scroll-cue svg { display: block; will-change: transform; animation: scrollCueBounce 1.2s ease-in-out infinite; }
-    @keyframes scrollCueBounce {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(7px); }
-    }
-    @keyframes scrollCueFade {
-      0%, 100% { opacity: 0.45; }
-      50%       { opacity: 1; }
-    }
+    .scroll-cue svg { animation: scrollCueBounce 1.2s ease-in-out infinite; }
+    @keyframes scrollCueBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
+    @keyframes scrollCueFade   { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-    /* HERO SCROLL SHOWCASE */
+    /* ── SCROLL SHOWCASE ── */
     .hero-scroll-wrap {
       width: 100%; overflow: hidden;
-      margin-top: 80px;
-      padding: 40px 0 60px;
+      padding: 48px 0 64px;
       position: relative;
     }
     .hero-scroll-wrap::before,
     .hero-scroll-wrap::after {
-      content: ''; position: absolute; top: 0; bottom: 0; width: 180px; z-index: 2; pointer-events: none;
+      content: ''; position: absolute; top: 0; bottom: 0; width: 200px; z-index: 2; pointer-events: none;
     }
-    .hero-scroll-wrap::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+    .hero-scroll-wrap::before { left: 0;  background: linear-gradient(to right, var(--bg), transparent); }
     .hero-scroll-wrap::after  { right: 0; background: linear-gradient(to left,  var(--bg), transparent); }
     .hero-scroll-track {
-      display: flex; gap: 24px; width: max-content;
-      animation: heroScroll 30s linear infinite;
-      will-change: transform;
+      display: flex; gap: 20px; width: max-content;
+      animation: heroScroll 36s linear infinite;
     }
     .hero-scroll-wrap:hover .hero-scroll-track { animation-play-state: paused; }
-    @keyframes heroScroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
+    @keyframes heroScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     .hero-phone-card {
-      flex-shrink: 0;
-      border-radius: 36px;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06);
+      flex-shrink: 0; border-radius: 32px; width: 240px;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.05);
       transition: transform 0.4s ease, box-shadow 0.4s ease;
-      width: 280px;
     }
     .hero-phone-card:hover {
-      transform: translateY(-12px) scale(1.03);
-      box-shadow: 0 56px 100px rgba(0,0,0,0.9), 0 0 0 1px rgba(154,254,67,0.15);
+      transform: translateY(-14px) scale(1.03);
+      box-shadow: 0 56px 96px rgba(0,0,0,0.85), 0 0 0 1px rgba(37,99,235,0.2);
     }
 
-    /* STATS BAR */
+    /* ── STATS BAR ── */
     .stats-bar {
-      display: flex; justify-content: center; gap: 48px;
-      padding: 48px 24px;
+      display: flex; justify-content: center; gap: 0;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      margin-top: 64px;
     }
-    .stat-item { text-align: center; }
-    .stat-num { font-size: 32px; font-weight: 900; color: var(--green); letter-spacing: -1px; }
-    .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .stat-item {
+      text-align: center; padding: 40px 48px;
+      border-right: 1px solid var(--border);
+      flex: 1;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num  { font-size: 34px; font-weight: 900; letter-spacing: -1px; }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 500; }
 
-    /* SECTION COMMONS */
-    .section-wrap { max-width: 1140px; margin: 0 auto; padding: 100px 32px; }
-    .section-tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      border-radius: 999px; padding: 5px 14px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
-      margin-bottom: 18px;
-    }
+    /* ── SECTION COMMONS ── */
+    .section-wrap { max-width: 1160px; margin: 0 auto; padding: 110px 36px; }
     .section-label-sm {
       font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1px; color: var(--green); margin-bottom: 12px;
+      letter-spacing: 1.2px; color: var(--blue); color: #60a5fa; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-label-sm::before {
+      content: ''; display: block; width: 20px; height: 2px;
+      background: #60a5fa; border-radius: 2px;
     }
     .section-wrap h2 {
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 900; line-height: 1.1; letter-spacing: -0.5px; margin-bottom: 80px;
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 900; line-height: 1.08; letter-spacing: -0.8px; margin-bottom: 80px;
     }
 
-    /* FEATURE ROW */
+    /* ── FEATURE TAG ── */
+    .feature-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      border-radius: 8px; padding: 5px 12px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    /* ── FEATURE ROW ── */
     .feature-row {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 80px; align-items: center; margin-bottom: 130px;
+      gap: 80px; align-items: center; margin-bottom: 140px;
     }
     .feature-row.flip { direction: rtl; }
     .feature-row.flip > * { direction: ltr; }
+    .feature-row:last-child { margin-bottom: 0; }
     .feature-text h3 {
-      font-size: clamp(26px, 3.5vw, 38px);
-      font-weight: 900; line-height: 1.1; letter-spacing: -0.5px; margin-bottom: 18px;
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 900; line-height: 1.08; letter-spacing: -0.6px; margin-bottom: 18px;
     }
-    .feature-text p { font-size: 16px; color: var(--muted); line-height: 1.8; margin-bottom: 28px; }
-    .bullets { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .feature-text p { font-size: 16px; color: var(--muted); line-height: 1.85; margin-bottom: 28px; }
+    .bullets { list-style: none; display: flex; flex-direction: column; gap: 14px; }
     .bullets li {
-      display: flex; align-items: flex-start; gap: 12px;
+      display: flex; align-items: flex-start; gap: 14px;
       font-size: 15px; color: var(--muted); line-height: 1.5;
     }
     .bullet-icon {
-      width: 28px; height: 28px; border-radius: 8px;
+      width: 30px; height: 30px; border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
       font-size: 14px; flex-shrink: 0; margin-top: 1px;
     }
 
-    /* PHONE FRAME */
+    /* ── PHONE FRAME ── */
     .phone-frame {
-      display: flex; justify-content: center; align-items: center;
-      position: relative;
+      display: flex; justify-content: center; align-items: center; position: relative;
     }
     .phone-glow {
-      position: absolute; width: 340px; height: 340px;
-      border-radius: 50%; filter: blur(90px); opacity: 0.2;
+      position: absolute; width: 360px; height: 360px;
+      border-radius: 50%; filter: blur(100px); opacity: 0.18;
       pointer-events: none; z-index: 0;
     }
     .phone-frame img {
-      width: 300px; border-radius: 32px;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05);
+      width: 300px; border-radius: 34px;
+      box-shadow: 0 48px 120px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.05);
       position: relative; z-index: 1;
       transition: transform 0.4s ease;
     }
     .phone-frame:hover img { transform: translateY(-10px) scale(1.02); }
 
-    /* HOTSPOTS */
+    /* ── HOTSPOTS ── */
     .hotspot-wrap { position: relative; display: inline-block; }
     .hotspot {
       position: absolute;
       left: var(--hx); top: var(--hy);
       transform: translate(-50%, -50%);
       width: 30px; height: 30px; border-radius: 50%;
-      background: rgba(var(--hs-rgb), 0.18);
+      background: rgba(var(--hs-rgb), 0.16);
       border: 1.5px solid rgba(var(--hs-rgb), 0.8);
-      -webkit-backdrop-filter: blur(6px);
       backdrop-filter: blur(6px);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      color: rgb(var(--hs-rgb));
-      transition: background 0.2s, transform 0.25s;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: rgb(var(--hs-rgb)); transition: background 0.2s, transform 0.25s;
       z-index: 10; padding: 0;
     }
     .hotspot:hover { background: rgba(var(--hs-rgb), 0.3); }
-    .hotspot.active {
-      background: rgba(var(--hs-rgb), 0.32);
-      transform: translate(-50%, -50%) scale(1.15);
-      border-color: rgb(var(--hs-rgb));
-    }
+    .hotspot.active { background: rgba(var(--hs-rgb), 0.3); transform: translate(-50%, -50%) scale(1.15); border-color: rgb(var(--hs-rgb)); }
     .hotspot > svg { transition: transform 0.3s ease; pointer-events: none; flex-shrink: 0; }
     .hotspot.active > svg { transform: rotate(45deg); }
     .hotspot-ring {
       position: absolute; inset: -8px; border-radius: 50%;
       border: 1px solid rgba(var(--hs-rgb), 0.45);
       animation: hsRing 2.4s ease-out infinite;
-      pointer-events: none; will-change: transform, opacity;
+      pointer-events: none;
     }
     .hotspot-ring + .hotspot-ring { inset: -18px; animation-delay: 0.75s; }
-    @keyframes hsRing {
-      0%   { opacity: 0.7; transform: scale(0.8); }
-      100% { opacity: 0;   transform: scale(1.1); }
-    }
+    @keyframes hsRing { 0% { opacity: 0.7; transform: scale(0.8); } 100% { opacity: 0; transform: scale(1.1); } }
     .hotspot-callout {
-      position: absolute; top: 50%;
-      width: 190px;
-      background: var(--bg2);
-      border: 1px solid var(--border);
+      position: absolute; top: 50%; width: 195px;
+      background: var(--bg2); border: 1px solid var(--border);
       border-radius: 12px; padding: 13px 15px;
       box-shadow: 0 20px 48px rgba(0,0,0,0.72);
       pointer-events: none; opacity: 0;
@@ -280,68 +318,75 @@
     }
     .hs-right .hotspot-callout { left: calc(100% + 14px); }
     .hs-left  .hotspot-callout { right: calc(100% + 14px); }
-    .hotspot.active .hotspot-callout {
-      opacity: 1; transform: translateY(-50%) scale(1); pointer-events: auto;
-    }
+    .hotspot.active .hotspot-callout { opacity: 1; transform: translateY(-50%) scale(1); pointer-events: auto; }
     .hotspot-callout strong { display: block; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
     .hotspot-callout p { font-size: 12px; color: var(--muted); line-height: 1.55; margin: 0; }
     .hs-green  { --hs-rgb: 154,254,67; }
+    .hs-blue   { --hs-rgb: 96,165,250; }
     .hs-teal   { --hs-rgb: 13,148,136; }
     .hs-purple { --hs-rgb: 124,58,237; }
     @media (max-width: 800px) { .hotspot { display: none; } }
 
-    /* SESSION FLOW DIAGRAM */
-    .session-flow { display: flex; align-items: center; gap: 18px; position: relative; z-index: 1; }
+    /* ── SESSION FLOW ── */
+    .session-flow { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
     .flow-source { display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
     .flow-phone-wrap { position: relative; }
     .flow-phone-sm {
-      width: 118px; border-radius: 20px; display: block;
+      width: 120px; border-radius: 20px; display: block;
       box-shadow: 0 16px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06);
     }
     .flow-tap {
       position: absolute; left: 72%; top: 88%;
       transform: translate(-50%, -50%);
       width: 34px; height: 34px; border-radius: 50%;
-      border: 2px solid var(--green);
-      pointer-events: none;
+      border: 2px solid var(--green); pointer-events: none;
     }
     .flow-tap-ring {
       position: absolute; inset: -8px; border-radius: 50%;
       border: 1.5px solid rgba(154,254,67,0.5);
       animation: tapRingPulse 1.8s ease-out infinite;
-      will-change: transform, opacity;
     }
     .flow-tap-ring + .flow-tap-ring { inset: -18px; animation-delay: 0.55s; }
-    @keyframes tapRingPulse {
-      0%   { opacity: 0.7; transform: scale(0.85); }
-      100% { opacity: 0;   transform: scale(1.2); }
-    }
-    .flow-step-label {
-      font-size: 10px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.8px; color: var(--muted); text-align: center;
-    }
+    @keyframes tapRingPulse { 0% { opacity: 0.7; transform: scale(0.85); } 100% { opacity: 0; transform: scale(1.2); } }
+    .flow-step-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); text-align: center; }
     .flow-step-label em { font-style: normal; color: var(--green); }
     .flow-connector { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
     .flow-connector-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--muted); }
-    .flow-arrow-path { stroke-dasharray: 5 4; animation: flowDash 0.9s linear infinite; will-change: stroke-dashoffset; }
+    .flow-arrow-path { stroke-dasharray: 5 4; animation: flowDash 0.9s linear infinite; }
     @keyframes flowDash { to { stroke-dashoffset: -18; } }
     .flow-dest { display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .session-flow .hotspot-wrap img { width: 200px; border-radius: 26px; }
 
-    /* DIVIDER */
-    hr.divider { border: none; border-top: 1px solid var(--border); max-width: 1100px; margin: 0 auto; }
+    /* ── DIVIDER ── */
+    hr.divider { border: none; border-top: 1px solid var(--border); max-width: 1120px; margin: 0 auto; }
 
-    /* PRICING SECTION */
+    /* ── COMMUNITY DUAL-PHONE ── */
+    .dual-phone { display: flex; align-items: flex-start; gap: 16px; position: relative; z-index: 1; justify-content: center; }
+    .dual-phone img { border-radius: 28px; box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05); }
+    .dual-phone img:first-child { width: 170px; margin-top: 32px; opacity: 0.88; }
+    .dual-phone img:last-child  { width: 200px; }
+
+    /* ── PRICING ── */
     .pricing-section {
-      max-width: 1140px; margin: 0 auto; padding: 100px 32px;
+      max-width: 1160px; margin: 0 auto; padding: 110px 36px;
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 80px; align-items: center;
     }
     .pricing-text h2 {
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 900; line-height: 1.1; letter-spacing: -0.5px; margin-bottom: 20px;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 900; line-height: 1.08; letter-spacing: -0.6px; margin-bottom: 20px;
     }
-    .pricing-text p { font-size: 16px; color: var(--muted); line-height: 1.8; margin-bottom: 32px; }
+    .pricing-text p { font-size: 16px; color: var(--muted); line-height: 1.85; margin-bottom: 32px; }
+    .tier-tabs {
+      display: flex; gap: 0; border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; margin-bottom: 24px; width: fit-content;
+    }
+    .tier-tab {
+      padding: 8px 22px; font-size: 13px; font-weight: 700; cursor: pointer;
+      background: transparent; color: var(--muted); border: none; transition: all 0.2s;
+    }
+    .tier-tab.active-pro    { background: var(--blue);   color: #fff; }
+    .tier-tab.active-elite  { background: var(--purple);  color: #fff; }
     .price-cards { display: flex; flex-direction: column; gap: 12px; }
     .price-card {
       background: var(--bg2); border: 1px solid var(--border);
@@ -349,48 +394,69 @@
       display: flex; align-items: center; justify-content: space-between;
       transition: border-color 0.3s;
     }
-    .price-card.highlight { border-color: var(--green); background: rgba(154,254,67,0.05); }
+    .price-card.highlight-green  { border-color: var(--green);  background: rgba(154,254,67,0.04); }
+    .price-card.highlight-purple { border-color: var(--purple); background: rgba(124,58,237,0.06); }
     .price-card-left { display: flex; flex-direction: column; gap: 3px; }
-    .price-name { font-size: 15px; font-weight: 700; }
-    .price-sub { font-size: 12px; color: var(--muted); }
+    .price-name  { font-size: 15px; font-weight: 700; }
+    .price-sub   { font-size: 12px; color: var(--muted); }
     .price-amount { font-size: 17px; font-weight: 800; color: var(--text); }
     .price-badge {
-      font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
-      padding: 3px 8px; border-radius: 6px;
-      background: var(--green); color: #000; margin-left: 8px;
-      vertical-align: middle;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.4px;
+      padding: 3px 8px; border-radius: 6px; margin-left: 8px; vertical-align: middle;
+    }
+    .price-badge-green  { background: var(--green);  color: #000; }
+    .price-badge-purple { background: var(--purple); color: #fff; }
+    .elite-features { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .elite-feature-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 16px;
+    }
+    .elite-feature-name { font-size: 14px; font-weight: 600; }
+    .elite-tag {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.4px;
+      padding: 2px 8px; border-radius: 5px;
+      background: rgba(124,58,237,0.2); color: #a78bfa;
+      border: 1px solid rgba(124,58,237,0.35);
     }
 
-    /* PROSE */
-    .prose { max-width: 720px; margin: 0 auto; padding: 80px 24px; }
-    .prose h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    /* ── PROSE ── */
+    .prose { max-width: 740px; margin: 0 auto; padding: 80px 24px; }
+    .prose h2 { font-size: 30px; font-weight: 900; margin-bottom: 8px; letter-spacing: -0.4px; }
     .prose .updated { font-size: 13px; color: var(--muted); margin-bottom: 40px; }
-    .prose h3 { font-size: 16px; font-weight: 700; margin: 32px 0 10px; }
-    .prose p { font-size: 15px; color: var(--muted); margin-bottom: 12px; line-height: 1.7; }
+    .prose h3 { font-size: 16px; font-weight: 700; margin: 32px 0 10px; color: var(--text); }
+    .prose p { font-size: 15px; color: var(--muted); margin-bottom: 12px; line-height: 1.75; }
     .prose ul { list-style: none; margin: 0 0 12px; padding: 0; }
     .prose ul li { font-size: 15px; color: var(--muted); padding: 4px 0 4px 20px; position: relative; line-height: 1.65; }
-    .prose ul li::before { content: "•"; position: absolute; left: 0; color: var(--green); }
+    .prose ul li::before { content: "–"; position: absolute; left: 0; color: var(--green); }
 
-    /* FOOTER */
-    footer { border-top: 1px solid var(--border); text-align: center; padding: 40px 24px; font-size: 13px; color: var(--muted); }
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 48px 24px; font-size: 13px; color: var(--muted); }
     footer a { color: var(--muted); }
     footer a:hover { color: var(--text); }
-    .footer-logo { height: 36px; width: auto; margin-bottom: 18px; opacity: 0.7; }
+    .footer-logo { height: 32px; width: auto; margin-bottom: 20px; opacity: 0.6; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: center; margin-bottom: 20px; }
 
-    /* RESPONSIVE */
-    @media (max-width: 800px) {
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
       .nav-links { display: none; }
-      .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 0; }
-      .hero-phones-col { height: 420px; margin-top: 40px; order: 1; }
-      .hero-phone-front { width: 190px; left: 5px; top: 20px; }
-      .hero-phone-back { width: 170px; left: 140px; top: 50px; }
-      .hero-text-col { align-items: flex-start; }
-      .stats-bar { gap: 28px; flex-wrap: wrap; }
+      .nav-cta { font-size: 13px; padding: 8px 16px; }
+      .hero { grid-template-columns: 1fr; padding: 60px 20px 40px; gap: 0; }
+      .hero-phones-col { height: 380px; margin-top: 48px; order: 1; }
+      .hero-phone-front { width: 200px; }
+      .hero-phone-back  { width: 172px; right: 0; top: 60px; }
+      .hero-badge-float { display: none; }
+      .stat-item { padding: 28px 20px; }
+      .stat-num  { font-size: 26px; }
       .feature-row, .pricing-section { grid-template-columns: 1fr; gap: 48px; margin-bottom: 80px; }
       .feature-row.flip { direction: ltr; }
-      .phone-frame img { width: 240px; }
-      .section-wrap { padding: 64px 20px; }
+      .phone-frame img { width: 250px; }
+      .section-wrap { padding: 72px 20px; }
       .section-wrap h2 { margin-bottom: 48px; }
+      .stats-bar { flex-wrap: wrap; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); flex: 1 1 40%; }
+      .dual-phone img:first-child { width: 130px; }
+      .dual-phone img:last-child  { width: 160px; }
     }
   </style>
 </head>
@@ -398,191 +464,203 @@
 
 <!-- NAV -->
 <nav>
-  <a class="nav-brand" href="#"><img src="images/Pokerroll-logo.svg" alt="PokerRoll" /></a>
+  <a class="nav-brand" href="#"><img src="images/stakemateLogo-horizontal-blue.svg" alt="Stakemate" /></a>
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#support">Support</a></li>
     <li><a href="#privacy">Privacy</a></li>
   </ul>
+  <a class="nav-cta" href="https://apps.apple.com/au/app/pokerroll/id6772975225" target="_blank" rel="noopener">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+    Download Free
+  </a>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
+<div class="hero-wrapper">
+  <div class="hero-gradient"></div>
+  <section class="hero">
 
-  <!-- Left: floating phone mockups -->
-  <div class="hero-phones-col reveal-left">
-    <img class="hero-phone-back" src="images/screen5.png" alt="PokerRoll live session" />
-    <img class="hero-phone-front" src="images/screen6.png" alt="PokerRoll dashboard" />
-  </div>
-
-  <!-- Right: text + CTA -->
-  <div class="hero-text-col">
-    <img src="images/Pokerroll-logo.svg" alt="PokerRoll" class="hero-logo reveal" />
-    <h1 class="reveal">
-      The poker tracker<br />built for <span class="accent">serious players.</span>
-    </h1>
-    <p class="reveal">
-      Track every session, log hands, and get street-by-street AI coaching.
-      Free for 7 days — no credit card required.
-    </p>
-    <div class="reveal hero-cta">
-      <div class="badge">Now Available on the App Store</div>
-      <a class="btn-appstore" href="https://apps.apple.com/au/app/pokerroll/id0000000000" target="_blank" rel="noopener">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        Download on the App Store
-      </a>
-      <p class="hero-meta">iPhone · iOS 16+ · Australia</p>
+    <!-- Left: text -->
+    <div class="hero-text-col">
+      <div class="hero-eyebrow reveal">
+        <span class="hero-eyebrow-dot"></span>
+        Now on the App Store · iOS 16+
+      </div>
+      <h1 class="reveal">
+        Your game,<br />tracked to<br />the <span class="accent-green">chip.</span>
+      </h1>
+      <p class="hero-sub reveal">
+        Sessions, stats, AI coaching, community stakes and live tournament calendars. The complete app for modern, serious poker players.
+      </p>
+      <div class="reveal">
+        <a class="btn-primary" href="https://apps.apple.com/au/app/pokerroll/id6772975225" target="_blank" rel="noopener">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Download on the App Store
+        </a>
+        <p class="hero-meta">Free · 7-day trial · iPhone · Australia</p>
+      </div>
     </div>
+
+    <!-- Right: phone mockups -->
+    <div class="hero-phones-col reveal-right">
+      <img class="hero-phone-back"  src="images/screen3.png" alt="Stakemate live session timer" />
+      <img class="hero-phone-front" src="images/screen2.png" alt="Stakemate bankroll dashboard" />
+      <div class="hero-badge-float">
+        <div class="badge-val">+$810.00</div>
+        <div class="badge-lbl">Total P&L · Main Bankroll</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Scroll cue -->
+  <div class="scroll-cue" onclick="document.getElementById('showcase').scrollIntoView({behavior:'smooth'})">
+    <span>Explore features</span>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="4 7 10 13 16 7"/>
+    </svg>
   </div>
-
-</section>
-
-<!-- SCROLL CUE -->
-<div class="scroll-cue" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
-  <span>Scroll to explore</span>
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="4 7 10 13 16 7"/>
-  </svg>
 </div>
 
-<!-- HERO SCROLL SHOWCASE -->
-<div class="hero-scroll-wrap">
+<!-- SCROLL SHOWCASE -->
+<div class="hero-scroll-wrap" id="showcase">
   <div class="hero-scroll-track">
-    <img class="hero-phone-card" src="images/screen1.png"  alt="PokerRoll welcome screen" />
-    <img class="hero-phone-card" src="images/screen5.png"  alt="PokerRoll live session" />
-    <img class="hero-phone-card" src="images/screen6.png"  alt="PokerRoll dashboard" />
-    <img class="hero-phone-card" src="images/screen7.png"  alt="PokerRoll add session" />
-    <img class="hero-phone-card" src="images/screen9.png"  alt="PokerRoll hand notes" />
-    <img class="hero-phone-card" src="images/screen10.png" alt="PokerRoll AI coaching" />
-    <img class="hero-phone-card" src="images/screen11.png" alt="PokerRoll pro plans" />
-    <!-- duplicate set for seamless loop -->
-    <img class="hero-phone-card" src="images/screen1.png"  alt="PokerRoll welcome screen" />
-    <img class="hero-phone-card" src="images/screen5.png"  alt="PokerRoll live session" />
-    <img class="hero-phone-card" src="images/screen6.png"  alt="PokerRoll dashboard" />
-    <img class="hero-phone-card" src="images/screen7.png"  alt="PokerRoll add session" />
-    <img class="hero-phone-card" src="images/screen9.png"  alt="PokerRoll hand notes" />
-    <img class="hero-phone-card" src="images/screen10.png" alt="PokerRoll AI coaching" />
-    <img class="hero-phone-card" src="images/screen11.png" alt="PokerRoll pro plans" />
+    <img class="hero-phone-card" src="images/screen1.png" alt="Stakemate dashboard" />
+    <img class="hero-phone-card" src="images/screen2.png" alt="Live session timer" />
+    <img class="hero-phone-card" src="images/screen3.png" alt="Community stakes" />
+    <img class="hero-phone-card" src="images/screen4.png" alt="Log a session" />
+    <img class="hero-phone-card" src="images/screen5.png" alt="Performance analytics" />
+    <img class="hero-phone-card" src="images/screen6.png" alt="Log poker sessions" />
+    <img class="hero-phone-card" src="images/screen7.png" alt="Hand notes" />
+    <img class="hero-phone-card" src="images/screen8.png" alt="AI hand review" />
+    <img class="hero-phone-card" src="images/screen9.png" alt="Community" />
+    <!-- duplicate for seamless loop -->
+    <img class="hero-phone-card" src="images/screen1.png" alt="Stakemate dashboard" />
+    <img class="hero-phone-card" src="images/screen2.png" alt="Live session timer" />
+    <img class="hero-phone-card" src="images/screen3.png" alt="Community stakes" />
+    <img class="hero-phone-card" src="images/screen4.png" alt="Log a session" />
+    <img class="hero-phone-card" src="images/screen5.png" alt="Performance analytics" />
+    <img class="hero-phone-card" src="images/screen6.png" alt="Log poker sessions" />
+    <img class="hero-phone-card" src="images/screen7.png" alt="Hand notes" />
+    <img class="hero-phone-card" src="images/screen8.png" alt="AI hand review" />
+    <img class="hero-phone-card" src="images/screen9.png" alt="Community" />
   </div>
 </div>
 
 <!-- STATS BAR -->
 <div class="stats-bar reveal">
   <div class="stat-item">
-    <div class="stat-num">10s</div>
-    <div class="stat-label">To log a session</div>
+    <div class="stat-num" style="color:var(--green);">10s</div>
+    <div class="stat-label">To log any session</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">7</div>
-    <div class="stat-label">Days free trial</div>
+    <div class="stat-num" style="color:#60a5fa;">7</div>
+    <div class="stat-label">Day free trial</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">AI</div>
-    <div class="stat-label">Hand coaching</div>
+    <div class="stat-num" style="color:var(--purple);">AI</div>
+    <div class="stat-label">Street-by-street coaching</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">4+</div>
-    <div class="stat-label">Streets analysed</div>
+    <div class="stat-num" style="color:var(--orange);">Live</div>
+    <div class="stat-label">Session timer & tracking</div>
   </div>
 </div>
 
 <!-- FEATURES -->
 <section class="section-wrap" id="features">
   <p class="section-label-sm reveal">Features</p>
-  <h2 class="reveal">Everything you need to<br />build your edge at the table.</h2>
+  <h2 class="reveal">Everything serious players<br />need in one place.</h2>
 
-  <!-- Feature 1: Dashboard -->
+  <!-- ── Feature 1: Dashboard ── -->
   <div class="feature-row">
     <div class="feature-text reveal-left">
-      <div class="section-tag" style="background:rgba(154,254,67,0.1);color:#9afe43;border:1px solid rgba(154,254,67,0.2);">📊 Bankroll Dashboard</div>
-      <h3>Know Your Numbers.<br />Build Your Edge.</h3>
-      <p>Your real-time bankroll dashboard shows everything that matters — profit, hourly rate, win rate, and playing streaks — all in one beautiful view.</p>
+      <div class="feature-tag" style="background:rgba(154,254,67,0.1);color:#9afe43;border:1px solid rgba(154,254,67,0.2);">📊 Bankroll Dashboard</div>
+      <h3>Know your edge.</h3>
+      <p>Track every session. See exactly where you win and lose — total P&L, win rate, avg session, and true hourly rate, all in one view.</p>
       <ul class="bullets">
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">💰</div>
-          Cash profit & tournament results tracked separately
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">💰</div>
+          Total P&L with bankroll curve updated after every session
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">📈</div>
-          True hourly rate, sessions played, hours at the table
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">📈</div>
+          Avg session, win rate, and true hourly rate in one row
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">🔥</div>
-          Playing streak to keep you consistent and motivated
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">▶️</div>
+          Start Live and AI Hand Review accessible from the home screen
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">🎯</div>
-          75% cash win rate — know exactly how you're running
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">📋</div>
+          Recent sessions at a glance with venue and format
         </li>
       </ul>
     </div>
     <div class="phone-frame reveal-right hs-green">
       <div class="phone-glow" style="background:#9afe43;"></div>
       <div class="hotspot-wrap">
-        <img src="images/screen6.png" alt="PokerRoll dashboard showing +$200 profit" />
-        <div class="hotspot hs-left" data-hx="50%" data-hy="30%">
+        <img src="images/screen2.png" alt="Stakemate dashboard showing bankroll P&L" />
+        <div class="hotspot hs-left" data-hx="50%" data-hy="28%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>Cash Profit</strong><p>Running bankroll P&L — updated automatically after every session.</p></div>
+          <div class="hotspot-callout"><strong>Total P&L</strong><p>Running bankroll profit updated automatically after every session logged.</p></div>
         </div>
-        <div class="hotspot hs-left" data-hx="50%" data-hy="44%">
+        <div class="hotspot hs-left" data-hx="50%" data-hy="43%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>Session Stats</strong><p>Hours played, total sessions and true $/hr — all in one row.</p></div>
+          <div class="hotspot-callout"><strong>Win Rate & Avg</strong><p>50% win rate, hours, sessions and avg/session — all in one stat row.</p></div>
         </div>
-        <div class="hotspot hs-left" data-hx="50%" data-hy="53%">
+        <div class="hotspot hs-left" data-hx="50%" data-hy="57%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>Cash Win Rate</strong><p>Percentage of cash sessions you finished in profit.</p></div>
+          <div class="hotspot-callout"><strong>Quick Actions</strong><p>Start Live session or go to AI Hand Review with one tap from home.</p></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Feature 2: Live Session -->
+  <!-- ── Feature 2: Live Session ── -->
   <div class="feature-row flip">
     <div class="feature-text reveal-right">
-      <div class="section-tag" style="background:rgba(154,254,67,0.1);color:#9afe43;border:1px solid rgba(154,254,67,0.2);">⏱️ Live Session Timer</div>
-      <h3>Go Live.<br />Track Every Minute.</h3>
-      <p>Start a live session the moment you sit down. The timer runs in real time so you always know exactly how long you've been at the table.</p>
+      <div class="feature-tag" style="background:rgba(154,254,67,0.1);color:#9afe43;border:1px solid rgba(154,254,67,0.2);">⏱️ Live Session Timer</div>
+      <h3>Play. We'll keep score.</h3>
+      <p>Start a live session and track your profit in real time as you play. The timer runs the moment you sit down — so you always know exactly how long you've been at the table.</p>
       <ul class="bullets">
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">▶️</div>
-          Live timer with clean circular display
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">🔴</div>
+          LIVE indicator with clean circular elapsed display
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">⏸️</div>
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">⏸️</div>
           Pause for breaks — only counts real table time
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">📝</div>
-          Add notes and rebuys on the fly during your session
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">📝</div>
+          Stakes, buy-in and venue always visible mid-session
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">🏁</div>
-          End session and log result in one tap
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">🏁</div>
+          End session and log result in a single tap
         </li>
       </ul>
     </div>
     <div class="phone-frame reveal-left hs-green">
       <div class="phone-glow" style="background:#9afe43;"></div>
       <div class="session-flow">
-
-        <!-- Source: Dashboard -->
         <div class="flow-source">
           <div class="flow-step-label">Dashboard</div>
           <div class="flow-phone-wrap">
-            <img class="flow-phone-sm" src="images/screen6.png" alt="PokerRoll dashboard" />
+            <img class="flow-phone-sm" src="images/screen2.png" alt="Stakemate dashboard" />
             <div class="flow-tap">
               <span class="flow-tap-ring"></span>
               <span class="flow-tap-ring"></span>
             </div>
           </div>
-          <div class="flow-step-label">Tap <em>Start Session</em></div>
+          <div class="flow-step-label">Tap <em>Start Live</em></div>
         </div>
-
-        <!-- Arrow -->
         <div class="flow-connector">
           <div class="flow-connector-label">Opens</div>
           <svg width="44" height="16" viewBox="0 0 44 16" fill="none" aria-hidden="true">
@@ -590,55 +668,47 @@
             <path d="M29 3 L40 8 L29 13" stroke="#9afe43" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-
-        <!-- Destination: Live screen -->
         <div class="flow-dest">
           <div class="flow-step-label"><em>Live</em> screen</div>
           <div class="hotspot-wrap">
-            <img src="images/screen5.png" alt="PokerRoll live session timer" />
+            <img src="images/screen3.png" alt="Stakemate live session timer" />
             <div class="hotspot hs-right" data-hx="50%" data-hy="40%">
               <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
               <div class="hotspot-callout"><strong>Live Timer</strong><p>Real-time elapsed — always know exactly how long you've been seated.</p></div>
             </div>
-            <div class="hotspot hs-right" data-hx="50%" data-hy="64%">
+            <div class="hotspot hs-right" data-hx="50%" data-hy="72%">
               <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-              <div class="hotspot-callout"><strong>Session Details</strong><p>Stakes, buy-in and venue — always visible mid-session.</p></div>
-            </div>
-            <div class="hotspot hs-right" data-hx="50%" data-hy="84%">
-              <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-              <div class="hotspot-callout"><strong>Quick Actions</strong><p>Break, Notes and Rebuy — one tap without ending your session.</p></div>
+              <div class="hotspot-callout"><strong>Session Info</strong><p>Stakes 5/5, buy-in $1,000 and venue visible at a glance mid-session.</p></div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 
-  <!-- Feature 3: Add Session -->
+  <!-- ── Feature 3: Log Session ── -->
   <div class="feature-row">
     <div class="feature-text reveal-left">
-      <div class="section-tag" style="background:rgba(154,254,67,0.1);color:#9afe43;border:1px solid rgba(154,254,67,0.2);">⚡ Quick Log</div>
-      <h3>Log a Session<br />in Under 10 Seconds.</h3>
-      <p>Preset Australian venues, popular stakes, and state defaults mean you can log a session faster than you can stack chips.</p>
+      <div class="feature-tag" style="background:rgba(154,254,67,0.1);color:#9afe43;border:1px solid rgba(154,254,67,0.2);">⚡ Quick Log</div>
+      <h3>Log a session in 10 seconds.</h3>
+      <p>Buy-in, stakes, venue, result. No spreadsheets. No excuses. Preset Australian venues and popular stakes mean logging takes less time than stacking your chips.</p>
       <ul class="bullets">
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">🏛️</div>
-          Preset venues — Star Sydney, Crown, Star Brisbane & more
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">🏛️</div>
+          Preset venues — Star Sydney, Crown, APL, NPL and more
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">🃏</div>
-          Popular stakes: 1/1, 1/2, 2/3, 5/5, 10/10
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">🃏</div>
+          Popular stakes: 1/1, 1/2, 2/3, 5/5, 10/10 — one tap
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">🗺️</div>
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">🗺️</div>
           NSW, VIC, QLD, WA, SA, ACT state defaults
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">🏆</div>
+          <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">🏆</div>
           Cash game and tournament modes
         </li>
       </ul>
@@ -646,80 +716,75 @@
     <div class="phone-frame reveal-right hs-green">
       <div class="phone-glow" style="background:#9afe43;"></div>
       <div class="hotspot-wrap">
-        <img src="images/screen7.png" alt="PokerRoll add live session with Australian venues" />
-        <div class="hotspot hs-left" data-hx="50%" data-hy="39%">
+        <img src="images/screen4.png" alt="Stakemate log session in 10 seconds" />
+        <div class="hotspot hs-left" data-hx="50%" data-hy="32%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>Quick Stakes</strong><p>1/1, 1/2, 2/3, 5/5, 10/10 — tap to select in one second.</p></div>
+          <div class="hotspot-callout"><strong>Winning Session</strong><p>+$3,000 profit shown instantly as you fill in cash-out amount.</p></div>
         </div>
-        <div class="hotspot hs-left" data-hx="50%" data-hy="52%">
+        <div class="hotspot hs-left" data-hx="50%" data-hy="55%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>State Defaults</strong><p>NSW, VIC, QLD, WA, SA, ACT — auto-fills venues for your state.</p></div>
-        </div>
-        <div class="hotspot hs-left" data-hx="50%" data-hy="68%">
-          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>Preset Venues</strong><p>Star Sydney, Crown, APL, NPL & more — one tap to select.</p></div>
+          <div class="hotspot-callout"><strong>All Details</strong><p>Buy-in, cash-out, stakes, duration, state and venue in one screen.</p></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Feature 4: Notes -->
+  <!-- ── Feature 4: Performance ── -->
   <div class="feature-row flip">
     <div class="feature-text reveal-right">
-      <div class="section-tag" style="background:rgba(13,148,136,0.12);color:#0d9488;border:1px solid rgba(13,148,136,0.25);">📝 Hand Notes</div>
-      <h3>Capture Every<br />Key Hand.</h3>
-      <p>Write hand notes your way in plain English — then let AI instantly compress them into clean poker shorthand. Never forget a big spot again.</p>
+      <div class="feature-tag" style="background:rgba(96,165,250,0.1);color:#60a5fa;border:1px solid rgba(96,165,250,0.22);">📉 Performance Analytics</div>
+      <h3>See where you make money.</h3>
+      <p>Filter by game, stakes or venue. Find your edge. Cut your leaks. Your bankroll curve, averages and ROI expose exactly where the money flows.</p>
       <ul class="bullets">
         <li>
-          <div class="bullet-icon" style="background:rgba(13,148,136,0.12);">✍️</div>
-          Freeform notes linked directly to your sessions
+          <div class="bullet-icon" style="background:rgba(96,165,250,0.1);">📈</div>
+          Bankroll curve — visualise every peak and drawdown
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(13,148,136,0.12);">🤖</div>
-          AI converts to shorthand: Raise $25, C-bet $60, All-in $247
+          <div class="bullet-icon" style="background:rgba(96,165,250,0.1);">💵</div>
+          +$650 avg/session · +$317 avg/hour · detailed breakdowns
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(13,148,136,0.12);">📤</div>
-          Export all notes or copy individual hands anytime
+          <div class="bullet-icon" style="background:rgba(96,165,250,0.1);">🎯</div>
+          Win rate and ROI tracked across all formats
         </li>
         <li>
-          <div class="bullet-icon" style="background:rgba(13,148,136,0.12);">🔍</div>
-          "Hand Reviewed" badge shows which hands have been coached
+          <div class="bullet-icon" style="background:rgba(96,165,250,0.1);">🏅</div>
+          Highlights: best session, worst session, best game type
         </li>
       </ul>
     </div>
-    <div class="phone-frame reveal-left hs-teal">
-      <div class="phone-glow" style="background:#0d9488;"></div>
+    <div class="phone-frame reveal-left hs-blue">
+      <div class="phone-glow" style="background:#60a5fa;"></div>
       <div class="hotspot-wrap">
-        <img src="images/screen9.png" alt="PokerRoll hand notes screen" />
-        <div class="hotspot hs-right" data-hx="50%" data-hy="23%">
+        <img src="images/screen5.png" alt="Stakemate performance analytics" />
+        <div class="hotspot hs-right" data-hx="50%" data-hy="22%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>Hand Reviewed Badge</strong><p>Shows which hands have already been sent to your AI coach.</p></div>
+          <div class="hotspot-callout"><strong>Bankroll Curve</strong><p>Visual chart of every session — see your upswings and downswings at a glance.</p></div>
         </div>
-        <div class="hotspot hs-right" data-hx="50%" data-hy="52%">
+        <div class="hotspot hs-right" data-hx="50%" data-hy="50%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>Hand History</strong><p>Write in plain English — street by street, exactly how you remember it.</p></div>
+          <div class="hotspot-callout"><strong>Performance Grid</strong><p>Avg/session, avg/hour, win rate and ROI in a clear 2×2 grid.</p></div>
         </div>
-        <div class="hotspot hs-right" data-hx="50%" data-hy="83%">
+        <div class="hotspot hs-right" data-hx="50%" data-hy="78%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>Review Hand</strong><p>Send to your AI coach for instant street-by-street analysis.</p></div>
+          <div class="hotspot-callout"><strong>Highlights</strong><p>Best session, worst session and best stake level — find your edge fast.</p></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Feature 5: Hand Review -->
+  <!-- ── Feature 5: AI Hand Review ── -->
   <div class="feature-row">
     <div class="feature-text reveal-left">
-      <div class="section-tag" style="background:rgba(124,58,237,0.12);color:#7c3aed;border:1px solid rgba(124,58,237,0.25);">🤖 AI Coaching</div>
-      <h3>Get Coached on<br />Every Hand.</h3>
-      <p>Replay any hand and receive instant street-by-street analysis from your personal AI poker coach. Know exactly what you did right — and what to do differently.</p>
+      <div class="feature-tag" style="background:rgba(124,58,237,0.12);color:#a78bfa;border:1px solid rgba(124,58,237,0.28);">🤖 AI Coaching</div>
+      <h3>Your personal poker coach.</h3>
+      <p>Describe any hand. Get instant analysis and coaching — street by street, graded decisions, and specific alternative plays for your exact spot.</p>
       <ul class="bullets">
         <li>
           <div class="bullet-icon" style="background:rgba(124,58,237,0.12);">🃏</div>
@@ -727,36 +792,113 @@
         </li>
         <li>
           <div class="bullet-icon" style="background:rgba(124,58,237,0.12);">🎓</div>
-          Graded decisions: A Excellent, B Good, C Marginal, D Mistake
+          Graded decisions: A Excellent · B Good · C Marginal · D Mistake
         </li>
         <li>
           <div class="bullet-icon" style="background:rgba(124,58,237,0.12);">💡</div>
-          "Do This Instead" — specific alternative lines suggested
+          "Do This Instead" — specific alternative plays for your exact spot
         </li>
         <li>
           <div class="bullet-icon" style="background:rgba(124,58,237,0.12);">🔄</div>
-          Re-run the analysis anytime for a second opinion
+          Re-run analysis anytime for a fresh perspective
         </li>
       </ul>
     </div>
     <div class="phone-frame reveal-right hs-purple">
       <div class="phone-glow" style="background:#7c3aed;"></div>
       <div class="hotspot-wrap">
-        <img src="images/screen10.png" alt="PokerRoll AI hand review coaching screen" />
-        <div class="hotspot hs-left" data-hx="50%" data-hy="16%">
+        <img src="images/screen7.png" alt="Stakemate AI hand review coaching" />
+        <div class="hotspot hs-left" data-hx="50%" data-hy="22%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>Decision Grade</strong><p>C Marginal — every preflop decision is graded instantly by your AI coach.</p></div>
+          <div class="hotspot-callout"><strong>Your Notes</strong><p>Describe the hand in plain English — street by street, exactly how you remember it.</p></div>
         </div>
-        <div class="hotspot hs-left" data-hx="50%" data-hy="47%">
+        <div class="hotspot hs-left" data-hx="50%" data-hy="48%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>Do This Instead</strong><p>Specific alternative lines — not generic advice, actual plays for your exact spot.</p></div>
+          <div class="hotspot-callout"><strong>Preflop Assessment</strong><p>Action, assessment, reasoning and "do this instead" per street.</p></div>
         </div>
-        <div class="hotspot hs-left" data-hx="50%" data-hy="63%">
+        <div class="hotspot hs-left" data-hx="50%" data-hy="72%">
           <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-          <div class="hotspot-callout"><strong>A Excellent</strong><p>Flop played perfectly — see exactly what you did right street by street.</p></div>
+          <div class="hotspot-callout"><strong>Flop Coaching</strong><p>C-bet sizing, board texture reads and pot control — all broken down clearly.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Feature 6: Community & Stakes ── -->
+  <div class="feature-row flip">
+    <div class="feature-text reveal-right">
+      <div class="feature-tag" style="background:rgba(13,148,136,0.12);color:#2dd4bf;border:1px solid rgba(13,148,136,0.28);">🤝 Community & Stakes</div>
+      <h3>Get backed. Back others.</h3>
+      <p>Buy and sell tournament action with players you trust. Right from your phone. Post sessions, follow players and find or offer stakes all in one community feed.</p>
+      <ul class="bullets">
+        <li>
+          <div class="bullet-icon" style="background:rgba(13,148,136,0.12);">📤</div>
+          List tournament packages with custom markup and selling %
+        </li>
+        <li>
+          <div class="bullet-icon" style="background:rgba(13,148,136,0.12);">👥</div>
+          Follow players you back — track their results and results
+        </li>
+        <li>
+          <div class="bullet-icon" style="background:rgba(13,148,136,0.12);">💸</div>
+          Buy action in APL, WPT, local series and home games
+        </li>
+        <li>
+          <div class="bullet-icon" style="background:rgba(13,148,136,0.12);">🌏</div>
+          Stakemate players worldwide — public and following feeds
+        </li>
+      </ul>
+    </div>
+    <div class="phone-frame reveal-left hs-teal">
+      <div class="phone-glow" style="background:#0d9488;"></div>
+      <div class="dual-phone">
+        <img src="images/screen10.png" alt="Stakemate community feed" />
+        <img src="images/screen9.png" alt="Stakemate buy and sell stakes" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Feature 7: Tournaments ── -->
+  <div class="feature-row">
+    <div class="feature-text reveal-left">
+      <div class="feature-tag" style="background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.25);">📅 Tournament Calendar</div>
+      <h3>Never miss a tournament.</h3>
+      <p>WPT, WSOP, Aussie Million, local series — all in one place. Search, filter and add events to your personal schedule so you never miss the action.</p>
+      <ul class="bullets">
+        <li>
+          <div class="bullet-icon" style="background:rgba(245,158,11,0.1);">🏆</div>
+          APL Million, WPT Australia, WSOP and more pre-loaded
+        </li>
+        <li>
+          <div class="bullet-icon" style="background:rgba(245,158,11,0.1);">🔍</div>
+          Search by series, venue or dates
+        </li>
+        <li>
+          <div class="bullet-icon" style="background:rgba(245,158,11,0.1);">📆</div>
+          Add events to My Schedule — personal tournament planner
+        </li>
+        <li>
+          <div class="bullet-icon" style="background:rgba(245,158,11,0.1);">📢</div>
+          Publish your own events to the community
+        </li>
+      </ul>
+    </div>
+    <div class="phone-frame reveal-right">
+      <div class="phone-glow" style="background:#f59e0b;"></div>
+      <div class="hotspot-wrap">
+        <img src="images/screen6.png" alt="Stakemate tournament calendar APL WPT" />
+        <div class="hotspot hs-left" data-hx="50%" data-hy="40%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>APL Million 2026</strong><p>11 events, 14 Aug · Southport Sharks, Gold Coast.</p></div>
+        </div>
+        <div class="hotspot hs-left" data-hx="50%" data-hy="64%">
+          <span class="hotspot-ring"></span><span class="hotspot-ring"></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+          <div class="hotspot-callout"><strong>WPT Australia 2026</strong><p>3 events, 10 Sep · The Star Sydney.</p></div>
         </div>
       </div>
     </div>
@@ -769,63 +911,97 @@
 <!-- PRICING -->
 <section class="pricing-section" id="pricing">
   <div class="pricing-text reveal-left">
-    <div class="section-tag" style="background:rgba(217,119,6,0.1);color:#d97706;border:1px solid rgba(217,119,6,0.25);">👑 PokerRoll Pro</div>
-    <h2>Free for 7 Days.<br />Then Keep the Basics.</h2>
-    <p>Try everything free for a full week — no credit card required. After your trial, core session tracking stays free forever. Upgrade to Pro for unlimited AI coaching and unlimited sessions.</p>
-    <ul class="bullets" style="margin-bottom:32px;">
+    <p class="section-label-sm" style="margin-bottom:16px;">Pricing</p>
+    <h2>Unlock the full game.</h2>
+    <p>Pro unlocks every feature — no limits. Start free for 7 days with full access to everything, no credit card required. After your trial, core tracking stays free forever.</p>
+    <ul class="bullets" style="margin-bottom:36px;">
       <li>
-        <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">✅</div>
-        Full AI coaching access for your first 7 days
+        <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">✅</div>
+        Full access to all features for your first 7 days
       </li>
       <li>
-        <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">✅</div>
-        Keep up to 30 sessions free after trial ends
+        <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">✅</div>
+        Core session tracking free forever after trial
       </li>
       <li>
-        <div class="bullet-icon" style="background:rgba(154,254,67,0.12);">✅</div>
+        <div class="bullet-icon" style="background:rgba(154,254,67,0.1);">✅</div>
         Upgrade or cancel anytime — no lock-in
       </li>
     </ul>
-    <a class="btn-appstore" href="https://apps.apple.com/au/app/pokerroll/id0000000000" target="_blank" rel="noopener" style="font-size:14px;padding:13px 26px;">
+    <a class="btn-primary" href="https://apps.apple.com/au/app/stakemate/id6743351618" target="_blank" rel="noopener" style="font-size:15px;padding:14px 28px;">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-      Start Free Trial
+      Start 7-Day Free Trial
     </a>
   </div>
 
   <div class="reveal-right">
-    <div class="price-cards" style="margin-bottom:24px;">
-      <div class="price-card">
-        <div class="price-card-left">
-          <span class="price-name">Lifetime <span class="price-badge">BEST DEAL</span></span>
-          <span class="price-sub">Pay once, own it forever</span>
+    <!-- Elite plan (from 09.png) -->
+    <div style="background:var(--bg2);border:1px solid rgba(124,58,237,0.4);border-radius:18px;padding:28px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:18px;">✦</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;">Elite</div>
+          <div style="font-size:12px;color:var(--muted);">Everything Pro + AI coaching</div>
         </div>
-        <span class="price-amount">$99.99</span>
+        <div style="margin-left:auto;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);border-radius:6px;padding:3px 10px;font-size:10px;font-weight:800;color:#a78bfa;letter-spacing:0.4px;">ELITE</div>
       </div>
-      <div class="price-card highlight">
-        <div class="price-card-left">
-          <span class="price-name">Yearly <span class="price-badge">BEST VALUE</span></span>
-          <span class="price-sub">~$6.67/month, billed annually</span>
+      <div class="price-cards" style="margin-bottom:20px;">
+        <div class="price-card highlight-purple">
+          <div class="price-card-left">
+            <span class="price-name">Yearly <span class="price-badge price-badge-purple">SAVE 17%</span></span>
+            <span class="price-sub">A$199.99/yr billed annually after trial</span>
+          </div>
+          <span class="price-amount" style="color:#a78bfa;">A$16.67<span style="font-size:12px;font-weight:600;color:var(--muted);">/mo</span></span>
         </div>
-        <span class="price-amount" style="color:var(--green);">$79.99/yr</span>
+        <div class="price-card">
+          <div class="price-card-left">
+            <span class="price-name">Monthly</span>
+            <span class="price-sub">Billed monthly, cancel anytime</span>
+          </div>
+          <span class="price-amount">A$19.99<span style="font-size:12px;font-weight:600;color:var(--muted);">/mo</span></span>
+        </div>
       </div>
-      <div class="price-card">
-        <div class="price-card-left">
-          <span class="price-name">Monthly</span>
-          <span class="price-sub">Billed monthly, cancel anytime</span>
+      <div class="elite-features">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:4px;">Everything in Pro, plus:</div>
+        <div class="elite-feature-row">
+          <span class="elite-feature-name">AI hand exploit analysis</span>
+          <span class="elite-tag">ELITE</span>
         </div>
-        <span class="price-amount">$9.99/mo</span>
-      </div>
-      <div class="price-card">
-        <div class="price-card-left">
-          <span class="price-name">Weekly</span>
-          <span class="price-sub">Great for a trial run</span>
+        <div class="elite-feature-row">
+          <span class="elite-feature-name">AI session coaching</span>
+          <span class="elite-tag">ELITE</span>
         </div>
-        <span class="price-amount">$2.99/wk</span>
+        <div class="elite-feature-row">
+          <span class="elite-feature-name">AI note enhance & compress</span>
+          <span class="elite-tag">ELITE</span>
+        </div>
       </div>
     </div>
-    <div class="phone-frame">
-      <div class="phone-glow" style="background:#d97706;"></div>
-      <img src="images/screen11.png" alt="PokerRoll upgrade to Pro pricing screen" />
+    <!-- Pro plan -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:28px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;">⚡</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;">Pro</div>
+          <div style="font-size:12px;color:var(--muted);">Unlimited sessions & community</div>
+        </div>
+      </div>
+      <div class="price-cards">
+        <div class="price-card highlight-green">
+          <div class="price-card-left">
+            <span class="price-name">Yearly <span class="price-badge price-badge-green">BEST VALUE</span></span>
+            <span class="price-sub">~A$6.67/month, billed annually</span>
+          </div>
+          <span class="price-amount" style="color:var(--green);">A$79.99/yr</span>
+        </div>
+        <div class="price-card">
+          <div class="price-card-left">
+            <span class="price-name">Monthly</span>
+            <span class="price-sub">Billed monthly, cancel anytime</span>
+          </div>
+          <span class="price-amount">A$9.99/mo</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -841,18 +1017,18 @@
   <p>For any questions, issues, or feedback, email us at <a href="mailto:support@stakemate.com.au">support@stakemate.com.au</a> and we'll get back to you within 1–2 business days.</p>
 
   <h3>Manage Your Subscription</h3>
-  <p>PokerRoll Pro subscriptions are managed through Apple. To cancel or change your subscription:</p>
+  <p>Stakemate subscriptions are managed through Apple. To cancel or change your plan:</p>
   <ul>
     <li>Open <strong>Settings</strong> on your iPhone</li>
     <li>Tap your name → <strong>Subscriptions</strong></li>
-    <li>Select <strong>PokerRoll</strong> and manage from there</li>
+    <li>Select <strong>Stakemate</strong> and manage from there</li>
   </ul>
 
   <h3>Restore Purchases</h3>
-  <p>If you've reinstalled the app or switched devices, go to <strong>Profile → Upgrade to Pro</strong> and tap <strong>Restore Purchases</strong>.</p>
+  <p>If you've reinstalled the app or switched devices, go to the <strong>Upgrade</strong> screen and tap <strong>Restore Purchases</strong>.</p>
 
   <h3>Delete Your Account</h3>
-  <p>You can request account deletion at any time from the <strong>Profile</strong> screen inside the app. Local session data can be cleared from <strong>Game Settings → Data Management</strong>.</p>
+  <p>You can request account deletion at any time from the <strong>Profile</strong> screen inside the app. Local session data can be cleared from <strong>Settings → Data Management</strong>.</p>
 </section>
 
 <hr class="divider" />
@@ -861,21 +1037,22 @@
 <section class="prose" id="privacy">
   <h2>Privacy Policy</h2>
   <p class="updated">Last updated: May 2025</p>
-  <p>PokerRoll is built with your privacy in mind. This policy explains what data we collect, why, and how it is used.</p>
+  <p>Stakemate is built with your privacy in mind. This policy explains what data we collect, why, and how it is used.</p>
 
   <h3>Data We Collect</h3>
   <ul>
     <li>Email address — only if you sign in with Apple or Google</li>
     <li>Display name — only if you choose to set one in your profile</li>
     <li>Session and hand data you enter — stored locally on your device</li>
+    <li>Community posts and stake listings — stored on our servers if you choose to publish</li>
     <li>Subscription and purchase status — managed securely by Apple and RevenueCat</li>
   </ul>
 
   <h3>How We Use Your Data</h3>
   <ul>
-    <li>To provide and improve the PokerRoll app</li>
+    <li>To provide and improve the Stakemate app and community features</li>
     <li>To manage your subscription and restore purchases</li>
-    <li>To send optional emails about challenges and prize opportunities (only if you opt in)</li>
+    <li>To send optional emails about tournaments and challenges (only if you opt in)</li>
   </ul>
 
   <h3>Data Sharing</h3>
@@ -893,11 +1070,11 @@
   <ul>
     <li>Request deletion of your account and all data from the Profile screen in the app</li>
     <li>Opt out of promotional emails at any time from your profile settings</li>
-    <li>Clear all local session data from Game Settings at any time</li>
+    <li>Clear all local session data from Settings at any time</li>
   </ul>
 
   <h3>Children's Privacy</h3>
-  <p>PokerRoll is not directed at children under 18. We do not knowingly collect data from minors.</p>
+  <p>Stakemate is not directed at children under 18. We do not knowingly collect data from minors.</p>
 
   <h3>Contact</h3>
   <p>For privacy questions: <a href="mailto:support@stakemate.com.au">support@stakemate.com.au</a></p>
@@ -909,15 +1086,18 @@
 <section class="prose" id="terms">
   <h2>Terms of Service</h2>
   <p class="updated">Last updated: May 2025</p>
-  <p>By downloading or using PokerRoll, you agree to these terms.</p>
+  <p>By downloading or using Stakemate, you agree to these terms.</p>
 
   <h3>Use of the App</h3>
-  <p>PokerRoll is licensed for personal, non-commercial use only. You may not reverse engineer, copy, modify, or redistribute the app or its content.</p>
+  <p>Stakemate is licensed for personal, non-commercial use only. You may not reverse engineer, copy, modify, or redistribute the app or its content.</p>
+
+  <h3>Community & Stakes</h3>
+  <p>The community stake-selling feature connects players for voluntary arrangements. Stakemate is not a party to any staking deal and accepts no liability for disputes between users. Users are responsible for honouring any arrangements made through the platform.</p>
 
   <h3>Subscriptions</h3>
   <ul>
-    <li>PokerRoll Pro is available as a weekly, monthly, annual, or lifetime purchase</li>
-    <li>Recurring subscriptions auto-renew unless cancelled at least 24 hours before renewal</li>
+    <li>Stakemate Pro and Elite are available as monthly or annual subscriptions</li>
+    <li>Subscriptions auto-renew unless cancelled at least 24 hours before renewal</li>
     <li>Payment is charged to your Apple ID at confirmation of purchase</li>
     <li>Manage or cancel via iPhone Settings → Subscriptions</li>
   </ul>
@@ -926,7 +1106,7 @@
   <p>New users receive a 7-day free trial with full access. The trial converts to a paid subscription unless cancelled before it ends.</p>
 
   <h3>Disclaimer</h3>
-  <p>PokerRoll is a personal tracking and coaching tool only. We are not responsible for gambling outcomes or financial decisions made using the app. Gamble responsibly.</p>
+  <p>Stakemate is a personal tracking and coaching tool only. We are not responsible for gambling outcomes or financial decisions made using the app. Gamble responsibly.</p>
 
   <h3>Governing Law</h3>
   <p>These terms are governed by the laws of New South Wales, Australia.</p>
@@ -937,24 +1117,25 @@
 
 <!-- FOOTER -->
 <footer>
-  <img src="images/Pokerroll-logo.svg" alt="PokerRoll" class="footer-logo" />
-  <p style="margin-bottom:10px;">
-    <a href="#features">Features</a> &nbsp;·&nbsp;
-    <a href="#pricing">Pricing</a> &nbsp;·&nbsp;
-    <a href="#support">Support</a> &nbsp;·&nbsp;
-    <a href="#privacy">Privacy Policy</a> &nbsp;·&nbsp;
+  <img src="images/stakemateLogo-horizontal.svg" alt="Stakemate" class="footer-logo" />
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#support">Support</a>
+    <a href="#privacy">Privacy Policy</a>
     <a href="#terms">Terms of Service</a>
-  </p>
-  <p>©2025 Stakemate &nbsp;·&nbsp; <a href="mailto:support@stakemate.com.au">support@stakemate.com.au</a></p>
+  </div>
+  <p>© 2025 Stakemate &nbsp;·&nbsp; <a href="mailto:support@stakemate.com.au">support@stakemate.com.au</a></p>
 </footer>
 
 <script>
-  // apply hotspot positions from data attributes (avoids inline style warnings)
+  // Apply hotspot positions from data attributes
   document.querySelectorAll('.hotspot[data-hx]').forEach(el => {
     el.style.setProperty('--hx', el.dataset.hx);
     el.style.setProperty('--hy', el.dataset.hy);
   });
-  // hotspot click toggle
+
+  // Hotspot click toggle
   document.querySelectorAll('.hotspot').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -967,15 +1148,15 @@
     document.querySelectorAll('.hotspot.active').forEach(h => h.classList.remove('active'));
   });
 
+  // Scroll reveal
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.1 });
   document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el, i) => {
-    el.style.transitionDelay = `${(i % 3) * 0.08}s`;
+    el.style.transitionDelay = `${(i % 4) * 0.07}s`;
     observer.observe(el);
   });
 </script>
-
 
 </body>
 </html>
